@@ -74,14 +74,13 @@ func TempPost(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("Time:", timeval)
 		fmt.Println("Temperature:", float32(temp))
 
-    // TODO: Implement a map where the room and the last received temperature is saved. Compare the current temperature vs the old temperature for every request. Write only to the database when the temperature has changed. IO is expensive.
+		// TODO: Implement a map where the room and the last received temperature is saved. Compare the current temperature vs the old temperature for every request. Write only to the database when the temperature has changed. IO is expensive.
 
-    // TODO: Implement writing to database
-    //ok, lets go.
-    // first, we need to check if the room exists and get its id.
-    //    if it doesnt, create it and get its id.
-    // then, we insert the data with the foreign key set to the id, the time provided and the actual temperature
-
+		// TODO: Implement writing to database
+		//ok, lets go.
+		// first, we need to check if the room exists and get its id.
+		//    if it doesnt, create it and get its id.
+		// then, we insert the data with the foreign key set to the id, the time provided and the actual temperature
 
 	} else {
 		http.Error(w, "Only POST allowed", http.StatusMethodNotAllowed)
@@ -144,7 +143,7 @@ func main() {
 
 	fmt.Println("sql statement preparation done")
 
-  fmt.Println("starting webserver")
+	fmt.Println("starting webserver")
 	http.HandleFunc("/", TempPost)
 	log.Fatal(http.ListenAndServeTLS(":8443", TLSCert, TLSKey, nil))
 }
