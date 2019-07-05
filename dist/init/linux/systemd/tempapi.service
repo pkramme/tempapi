@@ -1,0 +1,14 @@
+[Unit]
+Description=Temperature API
+Documentation=https://github.com/pkramme/tempapi
+After=network-online.target
+Wants=network-online.target systemd-networkd-wait-online.service
+
+[Service]
+Restart=on-abnormal
+User=tempapi
+EnvironmentFile=/opt/tempapi/tempapienvironment
+ExecStart=/opt/tempapi/tempapi
+
+[Install]
+WantedBy=multi-user.target
