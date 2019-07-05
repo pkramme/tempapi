@@ -105,7 +105,7 @@ func main() {
 	fmt.Println("connecting to database")
 
 	// Setup database connection
-	DatabaseConnectionString := fmt.Sprintf("dbname=%s user=%s host=%s password=%s", DatabaseUser, DatabaseAddress, DatabasePassword)
+	DatabaseConnectionString := fmt.Sprintf("dbname=%s user=%s host=%s password=%s", DatabaseName, DatabaseUser, DatabaseAddress, DatabasePassword)
 	db, err := sql.Open("postgres", DatabaseConnectionString)
 	if err != nil {
 		log.Fatal(err)
