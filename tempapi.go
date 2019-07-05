@@ -118,11 +118,11 @@ func main() {
 	fmt.Println("connection to database successfull")
 
 	fmt.Println("beginning database setup")
-	_, err := db.Exec(SetupRoomTable)
+	_, err = db.Exec(SetupRoomTable)
 	if err != nil {
 		panic(err)
 	}
-	_, err := db.Exec(SetupTempdataTable)
+	_, err = db.Exec(SetupTempdataTable)
 	if err != nil {
 		panic(err)
 	}
