@@ -20,7 +20,13 @@ const (
 	GetRoomByNameString  string = "SELECT id FROM rooms WHERE name = $1"
 )
 
-var AccessToken string
+var (
+	AccessToken string
+
+	AddNewRoomSQL     *sql.Stmt
+	AddNewTempdataSQL *sql.Stmt
+	GetRoomByNameSQL  *sql.Stmt
+)
 
 func TempPost(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodPost {
@@ -129,7 +135,7 @@ func main() {
 	}
 	defer AddNewRoomSQL.Close()
 
-	AddNewTempdataSQL, err = db.Prepare(AddNewTempdataSQL)
+	AddNewTempdataSQL, err = db.Prepare(AddNewTempdataString)
 	if err != nil {
 		panic(err)
 	}
