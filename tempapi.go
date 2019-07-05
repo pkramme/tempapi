@@ -15,7 +15,7 @@ const (
 	SetupRoomTable     string = "CREATE TABLE IF NOT EXISTS rooms (id SERIAL PRIMARY KEY NOT NULL, name varchar(255) NOT NULL)"
 	SetupTempdataTable string = "CREATE TABLE IF NOT EXISTS tempdata (id SERIAL PRIMARY KEY NOT NULL, roomid SERIAL REFERENCES rooms(id) NOT NULL, time TIMESTAMP NOT NULL, temperature FLOAT(32) NOT NULL)"
 
-	AddNewRoomString     string = "INSERT INTO rooms (name) VALUES ($1)"
+	AddNewRoomString     string = "INSERT INTO rooms (name) VALUES ($1) RETURNING id"
 	AddNewTempdataString string = "INSERT INTO tempdata (roomid, time, temperature) VALUES ($1, $2, $3)"
 	GetRoomByNameString  string = "SELECT id FROM rooms WHERE name = $1"
 )
@@ -82,10 +82,21 @@ func TempPost(w http.ResponseWriter, r *http.Request) {
 
 		// TODO: Implement a map where the room and the last received temperature is saved. Compare the current temperature vs the old temperature for every request. Write only to the database when the temperature has changed. IO is expensive.
 
-		// TODO: Implement writing to database
-		//ok, lets go.
-		// first, we need to check if the room exists and get its id.
-		//    if it doesnt, create it and get its id.
+		var roomid int64
+		err = GetRoomByNameSQL.QueryRow(room).Scan(&roomid)
+		if err != nil {
+			fmt.Println(err)
+		}
+		if roomid == 0 {
+			fmt.Println(room, "doesnt exist, creating it.")
+			err := AddNewRoomSQL.QueryRow(room).Scan(&roomid)
+			if err != nil {
+				fmt.Println(err)
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
+		}
+		fmt.Println("Created", room, "with ID", roomid)
 		// then, we insert the data with the foreign key set to the id, the time provided and the actual temperature
 
 	} else {
