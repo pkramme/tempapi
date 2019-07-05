@@ -1,0 +1,7 @@
+tlskey=/opt/tempapi/key.pem
+tlscert=/opt/tempapi/cert.pem
+token=replacewithagoodtoken
+databaseaddress=localhost
+databaseuser=tempapi
+databasename=tempapi
+databasepassword=replacewithyourdatabasepassword
