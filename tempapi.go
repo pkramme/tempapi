@@ -55,7 +55,6 @@ func TempPost(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		timeval := time.Unix(timeint, 0)
-		fmt.Println(timeval)
 
 		// Get room
 		room := q.Get("room")
@@ -76,10 +75,6 @@ func TempPost(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		fmt.Println("Room:", room)
-		fmt.Println("Time:", timeval)
-		fmt.Println("Temperature:", float32(temp))
-
 		// TODO: Implement a map where the room and the last received temperature is saved. Compare the current temperature vs the old temperature for every request. Write only to the database when the temperature has changed. IO is expensive.
 
 		var roomid int64
@@ -96,7 +91,7 @@ func TempPost(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 		}
-		fmt.Println("Created", room, "with ID", roomid)
+
 		_, err = AddNewTempdataSQL.Exec(roomid, timeval, temp)
 		if err != nil {
 			fmt.Println(err)
