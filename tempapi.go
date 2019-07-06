@@ -97,7 +97,12 @@ func TempPost(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 		fmt.Println("Created", room, "with ID", roomid)
-		// then, we insert the data with the foreign key set to the id, the time provided and the actual temperature
+		_, err = AddNewTempdataSQL.Exec(roomid, timeval, temp)
+		if err != nil {
+			fmt.Println(err)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
 
 	} else {
 		http.Error(w, "Only POST allowed", http.StatusMethodNotAllowed)
