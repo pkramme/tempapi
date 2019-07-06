@@ -5,3 +5,4 @@ databaseaddress=localhost
 databaseuser=tempapi
 databasename=tempapi
 databasepassword=replacewithyourdatabasepassword
+timezone=Europe/Berlin

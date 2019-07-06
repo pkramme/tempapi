@@ -23,6 +23,8 @@ const (
 var (
 	AccessToken string
 
+	TimezoneLocation *time.Location
+
 	AddNewRoomSQL     *sql.Stmt
 	AddNewTempdataSQL *sql.Stmt
 	GetRoomByNameSQL  *sql.Stmt
@@ -54,7 +56,8 @@ func TempPost(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
-		timeval := time.Unix(timeint, 0)
+		unixutctimeval := time.Unix(timeint, 0)
+		timeval := unixutctimeval.In(TimezoneLocation)
 
 		// Get room
 		room := q.Get("room")
@@ -112,6 +115,13 @@ func main() {
 	DatabasePassword := os.Getenv("databasepassword")
 	DatabaseUser := os.Getenv("databaseuser")
 	DatabaseName := os.Getenv("databasename")
+	Timezone := os.Getenv("timezone")
+
+	var err error
+	TimezoneLocation, err = time.LoadLocation(Timezone)
+	if err != nil {
+		panic(err)
+	}
 
 	fmt.Println("connecting to database")
 
