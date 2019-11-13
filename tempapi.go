@@ -13,7 +13,7 @@ import (
 
 const (
 	SetupRoomTable     string = "CREATE TABLE IF NOT EXISTS rooms (id SERIAL PRIMARY KEY NOT NULL, name varchar(255) NOT NULL)"
-	SetupTempdataTable string = "CREATE TABLE IF NOT EXISTS tempdata (id SERIAL PRIMARY KEY NOT NULL, roomid SERIAL REFERENCES rooms(id) NOT NULL, time TIMESTAMP NOT NULL, temperature FLOAT(32) NOT NULL)"
+	SetupTempdataTable string = "CREATE TABLE IF NOT EXISTS tempdata (id SERIAL PRIMARY KEY NOT NULL, roomid SERIAL REFERENCES rooms(id) NOT NULL, time TIMESTAMP WITH TIME ZONE NOT NULL, temperature FLOAT(32) NOT NULL)"
 
 	AddNewRoomString     string = "INSERT INTO rooms (name) VALUES ($1) RETURNING id"
 	AddNewTempdataString string = "INSERT INTO tempdata (roomid, time, temperature) VALUES ($1, $2, $3)"
@@ -56,8 +56,7 @@ func TempPost(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
-		unixutctimeval := time.Unix(timeint, 0)
-		timeval := unixutctimeval.In(TimezoneLocation)
+		timeval := time.Unix(timeint, 0)
 
 		// Get room
 		room := q.Get("room")
